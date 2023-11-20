@@ -1,0 +1,6 @@
+node_modules
+.github
+.env
+build
+coverage
+**/*.md
