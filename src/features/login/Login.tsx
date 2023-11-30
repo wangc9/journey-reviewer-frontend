@@ -1,37 +1,92 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
-import * as firebaseui from 'firebaseui';
-import firebase from 'firebase/compat/app';
-import { FirebaseApp } from 'firebase/app';
-import 'firebaseui/dist/firebaseui.css';
-import { getAuth } from 'firebase/auth';
+/* eslint-disable react/no-unescaped-entities */
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { TextField, Button, useTheme, Box } from '@mui/material';
 
-// TODO: Email enumeration protection
-/**
- * The login component for user login and sign-up, take in a
- * `FirebaseApp` instance and return a place holder with
- * `id=firebaseui-auth-container`. A pre-built Firebase authUI
- * is inserted in the placeholder
- * @param props: {firebaseApp}
- * @returns `<Login firebaseApp={} />`
- */
-function Login(props: { firebaseApp: FirebaseApp }) {
-  const { firebaseApp } = props;
-  const ui =
-    firebaseui.auth.AuthUI.getInstance() ||
-    new firebaseui.auth.AuthUI(getAuth(firebaseApp));
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const theme = useTheme();
+  const auth = getAuth();
+  const navigate = useNavigate();
+  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-  ui.start('#firebaseui-auth-container', {
-    signInOptions: [
-      {
-        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      },
-    ],
-    signInFlow: 'popup',
-    signInSuccessUrl: '/',
-  });
-
-  return <div id="firebaseui-auth-container" />;
+  return (
+    <div style={{ display: 'flex', height: '100%' }}>
+      <Box sx={{ flexGrow: 1 }} />
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          margin: theme.spacing(2),
+        }}
+      >
+        <Box sx={{ flexGrow: 1 }} />
+        <Box
+          sx={{
+            flexGrow: 1,
+            background: theme.palette.grey[100],
+            padding: theme.spacing(6),
+          }}
+        >
+          <h1 style={{ alignSelf: 'flex-start' }}>Log in</h1>
+          <form
+            onSubmit={(e) => {
+              handleSignIn(e);
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <TextField
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              label="email"
+              sx={{ margin: theme.spacing(1) }}
+            />
+            <TextField
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              label="password"
+              type="password"
+              sx={{ margin: theme.spacing(1) }}
+            />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              sx={{ borderRadius: 13, padding: theme.spacing(1, 6) }}
+            >
+              sign in
+            </Button>
+          </form>
+          <Box sx={{ flexGrow: 1, padding: theme.spacing(1) }} />
+          <Box>
+            <p>Don't have an account yet?</p>
+            <Button variant="text" size="small">
+              Create account
+            </Button>
+          </Box>
+        </Box>
+        <Box sx={{ flexGrow: 1 }} />
+      </Box>
+      <Box sx={{ flexGrow: 1 }} />
+    </div>
+  );
 }
-
-export default Login;

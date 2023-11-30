@@ -11,13 +11,18 @@ import {
   IconButton,
   Typography,
   Badge,
+  Button,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import ListIcon from '@mui/icons-material/List';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import MapIcon from '@mui/icons-material/Map';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useNavigate } from 'react-router-dom';
+import UserCard from '../userCard/UserCard';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,12 +63,185 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+function StyledMenu() {
+  return (
+    <IconButton
+      size="large"
+      edge="start"
+      color="inherit"
+      aria-label="open drawer"
+      sx={{ mr: 2 }}
+    >
+      <MenuIcon />
+    </IconButton>
+  );
+}
+
+function StyledHeadline() {
+  return (
+    <Typography
+      variant="h6"
+      noWrap
+      component="div"
+      sx={{ display: { xs: 'none', sm: 'block' } }}
+    >
+      JOURNEY VIEWER
+    </Typography>
+  );
+}
+
+function StyledSearchBar() {
+  return (
+    <Search>
+      <SearchIconWrapper>
+        <SearchIcon />
+      </SearchIconWrapper>
+      <StyledInputBase
+        placeholder="Search..."
+        inputProps={{ 'aria-label': 'search' }}
+      />
+    </Search>
+  );
+}
+
+function StyledGitHubIcon() {
+  return (
+    <IconButton
+      size="large"
+      aria-label="github"
+      color="inherit"
+      onClick={() => {
+        window.location.href =
+          'https://github.com/wangc9/journey-reviewer-frontend';
+      }}
+    >
+      <GitHubIcon />
+    </IconButton>
+  );
+}
+
+function StyledMapIcon() {
+  return (
+    <div>
+      <Button
+        sx={{ display: { xs: 'none', md: 'flex' } }}
+        startIcon={<MapIcon />}
+        color="inherit"
+      >
+        Map View
+      </Button>
+      <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="open drawer"
+        sx={{ mr: 2, display: { xs: 'flex', md: 'none' } }}
+      >
+        <MapIcon />
+      </IconButton>
+    </div>
+  );
+}
+
+function StyledListIcon() {
+  return (
+    <div>
+      <Button
+        sx={{ display: { xs: 'none', md: 'flex' } }}
+        startIcon={<ListIcon />}
+        color="inherit"
+      >
+        List View
+      </Button>
+      <IconButton
+        size="large"
+        edge="start"
+        color="inherit"
+        aria-label="open drawer"
+        sx={{ mr: 2, display: { xs: 'flex', md: 'none' } }}
+      >
+        <ListIcon />
+      </IconButton>
+    </div>
+  );
+}
+
+function NotificationWithBadge(props: { badge: number }) {
+  const { badge } = props;
+  return (
+    <IconButton
+      size="large"
+      aria-label="show new notifications"
+      color="inherit"
+    >
+      {badge === 0 ? (
+        <NotificationsIcon />
+      ) : (
+        <Badge badgeContent={badge} color="error">
+          <NotificationsIcon />
+        </Badge>
+      )}
+    </IconButton>
+  );
+}
+
+function StyledAccountIcon(props: {
+  username: string | undefined;
+  email: string | undefined;
+}) {
+  const [showCard, setShowCard] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { username, email } = props;
+
+  const handleButtonClick = () => {
+    if (username && email) {
+      setShowCard(!showCard);
+    } else {
+      navigate('/login');
+    }
+  };
+
+  return (
+    <div>
+      <IconButton
+        size="large"
+        aria-label="account of current user"
+        aria-controls="normal-menu"
+        aria-haspopup="true"
+        color="inherit"
+        onClick={handleButtonClick}
+      >
+        <AccountCircle />
+      </IconButton>
+      {showCard && <UserCard username={username} email={email} />}
+    </div>
+  );
+}
+
+function MobileMoreIcon(props: {
+  handleMobileOpen: (event: React.MouseEvent<HTMLElement>) => void;
+}) {
+  const { handleMobileOpen } = props;
+  return (
+    <IconButton
+      size="large"
+      aria-label="show more"
+      aria-controls="mobile-menu"
+      aria-haspopup="true"
+      onClick={handleMobileOpen}
+      color="inherit"
+    >
+      <MoreIcon />
+    </IconButton>
+  );
+}
+
 export default function NaviBar() {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [mobileAnchor, setMobileAnchor] = useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchor);
-  const isMobileOpen = Boolean(anchor);
+  const isMobileOpen = Boolean(mobileAnchor);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchor(event.currentTarget);
@@ -83,60 +261,23 @@ export default function NaviBar() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ display: 'flex', flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            JOURNEY VIEWER
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search..."
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
+          <StyledMenu />
+          <StyledHeadline />
+          <StyledSearchBar />
+          <Box sx={{ display: 'flex', flex: 1 }}>
+            <StyledMapIcon />
+            <StyledListIcon />
+          </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton
-              size="large"
-              aria-label="github"
-              color="inherit"
-              onClick={() => {
-                window.location.href =
-                  'https://github.com/wangc9/journey-reviewer-frontend';
-              }}
-            >
-              <GitHubIcon />
-            </IconButton>
+            <StyledGitHubIcon />
+            <NotificationWithBadge badge={0} />
+            <StyledAccountIcon username={undefined} email={undefined} />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls="mobile-menu"
-              aria-haspopup="true"
-              onClick={handleMobileOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
+            <MobileMoreIcon handleMobileOpen={handleMobileOpen} />
           </Box>
         </Toolbar>
       </AppBar>
@@ -157,27 +298,11 @@ export default function NaviBar() {
       >
         {/* TODO: Add route for notifications */}
         <MenuItem>
-          <IconButton
-            size="large"
-            aria-label="show new notifications"
-            color="inherit"
-          >
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <NotificationWithBadge badge={0} />
           <p>Notifications</p>
         </MenuItem>
         <MenuItem onClick={handleMenuOpen}>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="normal-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
+          <StyledAccountIcon username={undefined} email={undefined} />
           <p>Profile</p>
         </MenuItem>
       </Menu>
