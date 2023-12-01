@@ -2,17 +2,17 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
+// import { Provider } from 'react-redux';
+// import { store } from './app/store';
 import App from './App';
 import '@testing-library/jest-dom';
 
 describe('normal screen test suite', () => {
   test('renders front page', async () => {
     render(
-      <Provider store={store}>
-        <App />
-      </Provider>,
+      // <Provider store={store}>
+      <App />,
+      // </Provider>,
       { wrapper: BrowserRouter },
     );
 
@@ -21,9 +21,9 @@ describe('normal screen test suite', () => {
 
   test('can navigate to login page', async () => {
     render(
-      <Provider store={store}>
-        <App />
-      </Provider>,
+      // <Provider store={store}>
+      <App />,
+      // </Provider>,
       { wrapper: BrowserRouter },
     );
     const user = userEvent.setup();
