@@ -224,6 +224,7 @@ function MobileMoreIcon(props: {
   const { handleMobileOpen } = props;
   return (
     <IconButton
+      id="mobile-more-icon"
       size="large"
       aria-label="show more"
       aria-controls="mobile-menu"

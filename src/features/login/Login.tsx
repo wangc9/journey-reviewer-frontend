@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { TextField, Button, useTheme, Box } from '@mui/material';
+import { FirebaseApp } from 'firebase/app';
 
-export default function Login() {
+export default function Login(props: { firebaseApp: FirebaseApp }) {
+  const { firebaseApp } = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const theme = useTheme();
-  const auth = getAuth();
+  const auth = getAuth(firebaseApp);
   const navigate = useNavigate();
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

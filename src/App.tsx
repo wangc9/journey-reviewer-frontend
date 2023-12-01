@@ -1,17 +1,21 @@
 import React from 'react';
 // import logo from './logo.svg';
+import { Routes, Route } from 'react-router-dom';
 import Login from './features/login/Login';
 // import { Counter } from './features/counter/Counter';
 import firebaseClient from './utils/firebase-client-config';
 import NaviBar from './features/navigation/NaviBar';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
+    <div style={{ textAlign: 'center' }}>
       <NaviBar />
       <br />
-      <Login firebaseApp={firebaseClient} />
+      <Routes>
+        <Route path="/" element={<h1>Welcome!</h1>} />
+        <Route path="/login" element={<Login firebaseApp={firebaseClient} />} />
+      </Routes>
+
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />

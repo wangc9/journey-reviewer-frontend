@@ -9,26 +9,24 @@ on:
       types: [opened, synchronize]
 
 jobs:
-  # pre_deploy_pipeline:
-  #   if: ${{ !contains(join(github.event.commits.*.message, ', '), '#doc') }}
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '20'
-  #     - name: Install dependencies
-  #       run: npm install
-  #     - name: Check style
-  #       run: npm run lint
-  #     - name: Run jest tests
-  #       env:
-  #         MONGODB_URL: ${{ secrets.MONGODB_URL }}
-  #       run: npm test
+  pre_deploy_pipeline:
+    if: ${{ !contains(join(github.event.commits.*.message, ', '), '#doc') }}
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm install
+      - name: Check style
+        run: npm run lint
+      - name: Run jest tests
+        run: npm test
 
   version_change:
-    # if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
-    # needs: pre_deploy_pipeline
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
+    needs: pre_deploy_pipeline
     runs-on: ubuntu-20.04
     permissions:
       contents: write
