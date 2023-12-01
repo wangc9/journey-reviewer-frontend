@@ -19,6 +19,7 @@ export default function Login(props: { firebaseApp: FirebaseApp }) {
         navigate('/');
       })
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log(error);
       });
   }
