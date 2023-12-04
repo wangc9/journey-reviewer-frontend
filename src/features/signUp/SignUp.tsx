@@ -1,14 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { Auth, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { Auth, getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { TextField, Button, useTheme, Box } from '@mui/material';
 import { FirebaseApp, FirebaseError } from 'firebase/app';
 import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../app/hooks';
-import { addUser, UserState } from './userSlice';
+import { addUser, UserState } from '../login/userSlice';
 
-async function handleSignIn(props: {
+async function handleSignUp(props: {
   e: React.FormEvent<HTMLFormElement>;
   email: string;
   password: string;
@@ -26,7 +26,11 @@ async function handleSignIn(props: {
   const { e, email, password, navigate, auth, dispatch } = props;
   e.preventDefault();
   try {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const credential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
     if (credential) {
       dispatch(addUser(credential));
       navigate('/');
@@ -39,7 +43,7 @@ async function handleSignIn(props: {
   }
 }
 
-export default function Login(props: { firebaseApp: FirebaseApp }) {
+export default function SignUp(props: { firebaseApp: FirebaseApp }) {
   const { firebaseApp } = props;
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -67,10 +71,10 @@ export default function Login(props: { firebaseApp: FirebaseApp }) {
             padding: theme.spacing(6),
           }}
         >
-          <h1 style={{ alignSelf: 'flex-start' }}>Log in</h1>
+          <h1 style={{ alignSelf: 'flex-start' }}>Sign up</h1>
           <form
             onSubmit={(e) => {
-              handleSignIn({ e, email, password, navigate, auth, dispatch });
+              handleSignUp({ e, email, password, navigate, auth, dispatch });
             }}
             style={{
               display: 'flex',
@@ -103,20 +107,9 @@ export default function Login(props: { firebaseApp: FirebaseApp }) {
               aria-label="login-button"
               sx={{ borderRadius: 13, padding: theme.spacing(1, 6) }}
             >
-              sign in
+              Create and sign in
             </Button>
           </form>
-          <Box sx={{ flexGrow: 1, padding: theme.spacing(1) }} />
-          <Box>
-            <p>Don't have an account yet?</p>
-            <Button
-              variant="text"
-              size="small"
-              onClick={() => navigate('/signup')}
-            >
-              Create account
-            </Button>
-          </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} />
       </Box>

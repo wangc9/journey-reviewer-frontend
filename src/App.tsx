@@ -5,6 +5,7 @@ import Login from './features/login/Login';
 // import { Counter } from './features/counter/Counter';
 import firebaseClient from './utils/firebase-client-config';
 import NaviBar from './features/navigation/NaviBar';
+import SignUp from './features/signUp/SignUp';
 
 function App() {
   return (
@@ -14,6 +15,10 @@ function App() {
       <Routes>
         <Route path="/" element={<h1>Welcome!</h1>} />
         <Route path="/login" element={<Login firebaseApp={firebaseClient} />} />
+        <Route
+          path="/signup"
+          element={<SignUp firebaseApp={firebaseClient} />}
+        />
       </Routes>
 
       {/* <header className="App-header">

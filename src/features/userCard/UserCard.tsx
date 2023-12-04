@@ -76,21 +76,31 @@ export default function UserCard({
             {email}
           </Typography>
         </CardContent>
-        <Box sx={{ display: 'flex', flexGrow: 1 }}>
-          <IconButton size="medium" aria-label="My station" onClick={() => {}}>
-            <PedalBikeIcon />
-          </IconButton>
-          <IconButton size="medium" aria-label="My journey" onClick={() => {}}>
-            <DirectionsBikeIcon />
-          </IconButton>
-          <IconButton
-            size="medium"
-            aria-label="Logout"
-            onClick={() => handleLogout(dispatch)}
-          >
-            <LogoutIcon />
-          </IconButton>
-        </Box>
+        {email && (
+          <Box sx={{ display: 'flex', flexGrow: 1 }}>
+            <IconButton
+              size="medium"
+              aria-label="My station"
+              onClick={() => {}}
+            >
+              <PedalBikeIcon />
+            </IconButton>
+            <IconButton
+              size="medium"
+              aria-label="My journey"
+              onClick={() => {}}
+            >
+              <DirectionsBikeIcon />
+            </IconButton>
+            <IconButton
+              size="medium"
+              aria-label="Logout"
+              onClick={() => handleLogout(dispatch)}
+            >
+              <LogoutIcon />
+            </IconButton>
+          </Box>
+        )}
       </Box>
     </Card>
   );
