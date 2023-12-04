@@ -22,13 +22,12 @@ test('Mobile test', async () => {
     })),
   });
   window.matchMedia('(max-width: 900px)');
-  // @ts-ignore
-  const wrapper = ({ children }) => (
-    <BrowserRouter>
-      <Provider store={store}>{children}</Provider>
-    </BrowserRouter>
+  render(
+    <Provider store={store}>
+      <NaviBar />
+    </Provider>,
+    { wrapper: BrowserRouter },
   );
-  render(<NaviBar />, { wrapper });
   const mobileButton = screen.getByRole('button', { name: 'show more' });
   expect(mobileButton).toBeInTheDocument();
 });

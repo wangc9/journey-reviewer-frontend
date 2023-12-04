@@ -22,7 +22,7 @@ jobs:
       - name: Check style
         run: npm run lint
       - name: Run jest tests
-        run: npm test
+        run: npm test -- --coverage=false
 
   version_change:
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ', '), '#skip') }}
