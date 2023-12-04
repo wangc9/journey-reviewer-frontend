@@ -1,28 +1,52 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { Auth, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { TextField, Button, useTheme, Box } from '@mui/material';
-import { FirebaseApp } from 'firebase/app';
+import { FirebaseApp, FirebaseError } from 'firebase/app';
+import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
+import { useAppDispatch } from '../../app/hooks';
+import { addUser, UserState } from './userSlice';
+
+async function handleSignIn(props: {
+  e: React.FormEvent<HTMLFormElement>;
+  email: string;
+  password: string;
+  navigate: NavigateFunction;
+  auth: Auth;
+  dispatch: ThunkDispatch<
+    {
+      user: UserState;
+    },
+    undefined,
+    AnyAction
+  > &
+    Dispatch<AnyAction>;
+}) {
+  const { e, email, password, navigate, auth, dispatch } = props;
+  e.preventDefault();
+  try {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    if (credential) {
+      dispatch(addUser(credential));
+      navigate('/');
+    }
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      // eslint-disable-next-line no-console
+      console.log(error.message);
+    }
+  }
+}
 
 export default function Login(props: { firebaseApp: FirebaseApp }) {
   const { firebaseApp } = props;
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const theme = useTheme();
   const auth = getAuth(firebaseApp);
   const navigate = useNavigate();
-  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        navigate('/');
-      })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-      });
-  }
+  const dispatch = useAppDispatch();
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -46,7 +70,7 @@ export default function Login(props: { firebaseApp: FirebaseApp }) {
           <h1 style={{ alignSelf: 'flex-start' }}>Log in</h1>
           <form
             onSubmit={(e) => {
-              handleSignIn(e);
+              handleSignIn({ e, email, password, navigate, auth, dispatch });
             }}
             style={{
               display: 'flex',
@@ -59,13 +83,15 @@ export default function Login(props: { firebaseApp: FirebaseApp }) {
                 setEmail(e.target.value);
               }}
               label="email"
+              aria-label="email"
               sx={{ margin: theme.spacing(1) }}
             />
             <TextField
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              label="password"
+              label="login-password"
+              aria-label="password"
               type="password"
               sx={{ margin: theme.spacing(1) }}
             />
@@ -74,6 +100,7 @@ export default function Login(props: { firebaseApp: FirebaseApp }) {
               variant="contained"
               color="primary"
               type="submit"
+              aria-label="login-button"
               sx={{ borderRadius: 13, padding: theme.spacing(1, 6) }}
             >
               sign in

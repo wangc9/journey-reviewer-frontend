@@ -22,7 +22,9 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import MapIcon from '@mui/icons-material/Map';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
 import UserCard from '../userCard/UserCard';
+import { selectCredential } from '../login/userSlice';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -185,16 +187,13 @@ function NotificationWithBadge(props: { badge: number }) {
   );
 }
 
-function StyledAccountIcon(props: {
-  username: string | undefined;
-  email: string | undefined;
-}) {
+function StyledAccountIcon(props: { email: string | null }) {
   const [showCard, setShowCard] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { username, email } = props;
+  const { email } = props;
 
   const handleButtonClick = () => {
-    if (username && email) {
+    if (email || (!email && showCard)) {
       setShowCard(!showCard);
     } else {
       navigate('/login');
@@ -213,7 +212,7 @@ function StyledAccountIcon(props: {
       >
         <AccountCircle />
       </IconButton>
-      {showCard && <UserCard username={username} email={email} />}
+      {showCard && <UserCard email={email} />}
     </div>
   );
 }
@@ -240,6 +239,7 @@ function MobileMoreIcon(props: {
 export default function NaviBar() {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [mobileAnchor, setMobileAnchor] = useState<null | HTMLElement>(null);
+  const credential = useAppSelector(selectCredential);
 
   const isMenuOpen = Boolean(anchor);
   const isMobileOpen = Boolean(mobileAnchor);
@@ -275,7 +275,9 @@ export default function NaviBar() {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <StyledGitHubIcon />
             <NotificationWithBadge badge={0} />
-            <StyledAccountIcon username={undefined} email={undefined} />
+            <StyledAccountIcon
+              email={credential ? credential.user.email : null}
+            />
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <MobileMoreIcon handleMobileOpen={handleMobileOpen} />
@@ -303,7 +305,9 @@ export default function NaviBar() {
           <p>Notifications</p>
         </MenuItem>
         <MenuItem onClick={handleMenuOpen}>
-          <StyledAccountIcon username={undefined} email={undefined} />
+          <StyledAccountIcon
+            email={credential ? credential.user.email : null}
+          />
           <p>Profile</p>
         </MenuItem>
       </Menu>

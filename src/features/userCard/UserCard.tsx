@@ -5,13 +5,45 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import PedalBikeIcon from '@mui/icons-material/PedalBike';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { getAuth, signOut } from 'firebase/auth';
+import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
+import firebaseClient from '../../utils/firebase-client-config';
+import { deleteUser, UserState } from '../login/userSlice';
+import { useAppDispatch } from '../../app/hooks';
 
-export default function UserCard(props: {
-  username: string | undefined;
-  email: string | undefined;
+const handleLogoutDefault = async (
+  dispatch: ThunkDispatch<
+    {
+      user: UserState;
+    },
+    undefined,
+    AnyAction
+  > &
+    Dispatch<AnyAction>,
+) => {
+  const auth = getAuth(firebaseClient);
+  await signOut(auth);
+  dispatch(deleteUser());
+};
+
+export default function UserCard({
+  email,
+  handleLogout = handleLogoutDefault,
+}: {
+  email: string | null;
+  handleLogout?: (
+    dispatch: ThunkDispatch<
+      {
+        user: UserState;
+      },
+      undefined,
+      AnyAction
+    > &
+      Dispatch<AnyAction>,
+  ) => Promise<void>;
 }) {
-  const { username, email } = props;
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   return (
     <Card
       sx={{
@@ -36,9 +68,6 @@ export default function UserCard(props: {
       >
         <AccountCircle fontSize="large" />
         <CardContent sx={{ flex: '1 0 auto', alignItems: 'center' }}>
-          <Typography component="div" variant="h6">
-            {username}
-          </Typography>
           <Typography
             component="div"
             color="text.secondary"
@@ -54,7 +83,11 @@ export default function UserCard(props: {
           <IconButton size="medium" aria-label="My journey" onClick={() => {}}>
             <DirectionsBikeIcon />
           </IconButton>
-          <IconButton size="medium" aria-label="Logout" onClick={() => {}}>
+          <IconButton
+            size="medium"
+            aria-label="Logout"
+            onClick={() => handleLogout(dispatch)}
+          >
             <LogoutIcon />
           </IconButton>
         </Box>

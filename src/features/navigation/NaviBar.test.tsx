@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 // import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../../app/store';
 import NaviBar from './NaviBar';
 import '@testing-library/jest-dom';
 
@@ -20,7 +22,13 @@ test('Mobile test', async () => {
     })),
   });
   window.matchMedia('(max-width: 900px)');
-  render(<NaviBar />, { wrapper: BrowserRouter });
+  // @ts-ignore
+  const wrapper = ({ children }) => (
+    <BrowserRouter>
+      <Provider store={store}>{children}</Provider>
+    </BrowserRouter>
+  );
+  render(<NaviBar />, { wrapper });
   const mobileButton = screen.getByRole('button', { name: 'show more' });
   expect(mobileButton).toBeInTheDocument();
 });
