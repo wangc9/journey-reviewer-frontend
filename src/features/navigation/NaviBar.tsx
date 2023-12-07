@@ -123,12 +123,15 @@ function StyledGitHubIcon() {
 }
 
 function StyledMapIcon() {
+  const navigate = useNavigate();
+
   return (
     <div>
       <Button
         sx={{ display: { xs: 'none', md: 'flex' } }}
         startIcon={<MapIcon />}
         color="inherit"
+        onClick={() => navigate('/user/stations/map/single')}
       >
         Map View
       </Button>
@@ -212,7 +215,7 @@ function StyledAccountIcon(props: { email: string | null }) {
       >
         <AccountCircle />
       </IconButton>
-      {showCard && <UserCard email={email} />}
+      {showCard && <UserCard email={email} setShowCard={setShowCard} />}
     </div>
   );
 }

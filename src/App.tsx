@@ -6,6 +6,8 @@ import Login from './features/login/Login';
 import firebaseClient from './utils/firebase-client-config';
 import NaviBar from './features/navigation/NaviBar';
 import SignUp from './features/signUp/SignUp';
+import AddStationMap from './features/map/AddStationMap';
+import UserStationMap from './features/map/UserStationMap';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           path="/signup"
           element={<SignUp firebaseApp={firebaseClient} />}
         />
+        <Route path="/user/stations/map" element={<UserStationMap />} />
+        <Route path="/user/stations/map/single" element={<AddStationMap />} />
       </Routes>
 
       {/* <header className="App-header">

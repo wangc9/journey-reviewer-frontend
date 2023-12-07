@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch as ReactDispatch, SetStateAction } from 'react';
 import { Card, CardContent, Box, IconButton, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -7,6 +7,7 @@ import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { getAuth, signOut } from 'firebase/auth';
 import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 import firebaseClient from '../../utils/firebase-client-config';
 import { deleteUser, UserState } from '../login/userSlice';
 import { useAppDispatch } from '../../app/hooks';
@@ -26,11 +27,9 @@ const handleLogoutDefault = async (
   dispatch(deleteUser());
 };
 
-export default function UserCard({
-  email,
-  handleLogout = handleLogoutDefault,
-}: {
+export default function UserCard(props: {
   email: string | null;
+  setShowCard: ReactDispatch<SetStateAction<boolean>>;
   handleLogout?: (
     dispatch: ThunkDispatch<
       {
@@ -42,8 +41,15 @@ export default function UserCard({
       Dispatch<AnyAction>,
   ) => Promise<void>;
 }) {
+  const { email, setShowCard } = props;
+  // eslint-disable-next-line react/destructuring-assignment
+  const handleLogout = props.handleLogout
+    ? // eslint-disable-next-line react/destructuring-assignment
+      props.handleLogout
+    : handleLogoutDefault;
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   return (
     <Card
       sx={{
@@ -81,7 +87,10 @@ export default function UserCard({
             <IconButton
               size="medium"
               aria-label="My station"
-              onClick={() => {}}
+              onClick={() => {
+                setShowCard(false);
+                navigate('/user/stations/map');
+              }}
             >
               <PedalBikeIcon />
             </IconButton>
