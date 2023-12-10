@@ -15,7 +15,7 @@ module.exports = {
     'prettier',
     'plugin:cypress/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules', '.github'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'node_modules', '.github', 'docs'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -23,9 +23,10 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   settings: { react: { version: '18.2' } },
-  plugins: ['react-refresh', 'jest'],
+  plugins: ['react-refresh', 'jest', 'eslint-plugin-tsdoc'],
   rules: {
     'react/jsx-no-target-blank': 'off',
     'react/require-default-props': 'off',
+    'tsdoc/syntax': 'warn',
   },
 };

@@ -1,7 +1,10 @@
 import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 
-export default function UserStationMap() {
+/**
+ * Renders a map with all the user-added stations
+ */
+export default function UserStationMap(): JSX.Element {
   return (
     <MapContainer
       center={[60.171033, 24.941497]}

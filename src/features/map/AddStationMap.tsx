@@ -23,6 +23,9 @@ import { IStation } from '../listView/stationSlice';
 import stationServices from '../../services/stations';
 import { selectCredential } from '../login/userSlice';
 
+/**
+ * Type for position data.
+ */
 interface PositionData {
   lat: number;
   lng: number;
@@ -33,6 +36,12 @@ enum Kaupunki {
   espoo = 'Espoo',
 }
 
+/**
+ * Type guard for Kaupunki in {@link IStation}.
+ * @param param - String to be checked.
+ *
+ * @returns True if `param` is either `Helsinki` or `Espoo`.
+ */
 const isKaupunki = (param: string): param is Kaupunki =>
   Object.values(Kaupunki)
     .map((v) => v.toString())
@@ -43,15 +52,35 @@ enum Stad {
   esbo = 'Esbo',
 }
 
+/**
+ * Type guard for Stad in {@link IStation}.
+ * @param param - String to be checked.
+ *
+ * @returns True if `param` is either `Helsingfors` or `Esbo`.
+ */
 const isStad = (param: string): param is Stad =>
   Object.values(Stad)
     .map((v) => v.toString())
     .includes(param);
 
-function MapFunction(props: {
+/**
+ * Props type for {@link MapFunction}
+ */
+export interface MapFunctionProps {
+  /** The `set` function for `currentPosition` state. */
   setCurrentPosition: Dispatch<SetStateAction<PositionData | null>>;
+
+  /** The `set` function for `showPromote` state. */
   setShowPromote: Dispatch<SetStateAction<boolean>>;
-}) {
+}
+
+/**
+ * A function used by `react-leaflet` to handle click. When clicked,
+ * record the position of the clicked point and change `showPromote`
+ * state to `true` for visualising {@link MapDialog}.
+ * @param props - Props for the function. Implemented at {@link MapFunctionProps}.
+ */
+export function MapFunction(props: MapFunctionProps): null {
   const { setCurrentPosition, setShowPromote } = props;
   useMapEvent('click', (e: LeafletMouseEvent) => {
     const newPosition: PositionData = {
@@ -65,11 +94,27 @@ function MapFunction(props: {
   return null;
 }
 
-export function MapDialog(props: {
+/**
+ * Props type for {@link MapDialog}
+ */
+export interface MapDialogProps {
+  /** A state to determine whether to show this dialog. */
   showPromote: boolean;
+
+  /** The `set` function for `showPromote`. */
   setShowPromote: Dispatch<SetStateAction<boolean>>;
+
+  /** The location data of the clicked point. */
   position: PositionData | null;
-}) {
+}
+
+/**
+ * Renders a dialog with a form for adding information of a new station when
+ * the map is clicked.
+ *
+ * @param props - Prop for the component. Implemented at {@link MapDialogProps}.
+ */
+export function MapDialog(props: MapDialogProps): JSX.Element {
   const { showPromote, setShowPromote, position } = props;
   const name = useField('text');
   const namn = useField('text');
@@ -251,7 +296,10 @@ export function MapDialog(props: {
   );
 }
 
-export default function AddStationMap() {
+/**
+ * Renders a map which can be clicked to add new stations.
+ */
+export default function AddStationMap(): JSX.Element {
   const [currentPosition, setCurrentPosition] = useState<PositionData | null>(
     null,
   );

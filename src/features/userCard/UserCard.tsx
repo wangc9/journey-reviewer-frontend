@@ -12,6 +12,11 @@ import firebaseClient from '../../utils/firebase-client-config';
 import { deleteUser, UserState } from '../login/userSlice';
 import { useAppDispatch } from '../../app/hooks';
 
+/**
+ * Sign out current user from Firebase.
+ *
+ * @param dispatch - dispatch action from the appDispatch hook.
+ */
 const handleLogoutDefault = async (
   dispatch: ThunkDispatch<
     {
@@ -27,9 +32,19 @@ const handleLogoutDefault = async (
   dispatch(deleteUser());
 };
 
-export default function UserCard(props: {
+/**
+ * Props type for {@link UserCard}.
+ */
+export interface UserCardProps {
+  /** Email of the current user. */
   email: string | null;
+
+  /** The `set` function of state `showCard`. Controls the
+   * visibility of the user card.
+   */
   setShowCard: ReactDispatch<SetStateAction<boolean>>;
+
+  /** Function used by the log-out button to sign out current user. */
   handleLogout?: (
     dispatch: ThunkDispatch<
       {
@@ -40,7 +55,17 @@ export default function UserCard(props: {
     > &
       Dispatch<AnyAction>,
   ) => Promise<void>;
-}) {
+}
+
+/**
+ * Renders a card with current user information. When logged-in,
+ * display user email, buttons to user's own added stations
+ * and journeys respectively, and a button for log out.
+ *
+ * @param props - Props for the component. Implemented at {@link UserCardProps}.
+ *
+ */
+export default function UserCard(props: UserCardProps): JSX.Element {
   const { email, setShowCard } = props;
   // eslint-disable-next-line react/destructuring-assignment
   const handleLogout = props.handleLogout

@@ -8,12 +8,26 @@ import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../app/hooks';
 import { addUser, UserState } from './userSlice';
 
-async function handleSignIn(props: {
+/**
+ * Props type for {@link handleSignIn}
+ */
+export interface HandleSignInProps {
+  /** Form submit event. */
   e: React.FormEvent<HTMLFormElement>;
+
+  /** Email typed in the form. */
   email: string;
+
+  /** Password typed in the form. */
   password: string;
+
+  /** Navigate function. */
   navigate: NavigateFunction;
+
+  /** An `auth` instance of the Firebase project. */
   auth: Auth;
+
+  /** A dispatch function from the `useAppDispatch` hook. */
   dispatch: ThunkDispatch<
     {
       user: UserState;
@@ -22,7 +36,15 @@ async function handleSignIn(props: {
     AnyAction
   > &
     Dispatch<AnyAction>;
-}) {
+}
+
+/**
+ * Sing-in handling function. Add the user credential from Firebase
+ * to the Redux store and navigate to the front page if successful.
+ *
+ * @param props - Props for the function. Implemented at {@link HandleSignInProps}.
+ */
+async function handleSignIn(props: HandleSignInProps): Promise<void> {
   const { e, email, password, navigate, auth, dispatch } = props;
   e.preventDefault();
   try {
@@ -39,7 +61,20 @@ async function handleSignIn(props: {
   }
 }
 
-export default function Login(props: { firebaseApp: FirebaseApp }) {
+/**
+ * Prop type for {@link Login}
+ */
+export interface LoginProp {
+  /** A Firebase app instance. */
+  firebaseApp: FirebaseApp;
+}
+
+/**
+ * Renders a login page.
+ *
+ * @param props - Prop for the component. Implemented at {@link LoginProp}.
+ */
+export default function Login(props: LoginProp): JSX.Element {
   const { firebaseApp } = props;
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');

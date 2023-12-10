@@ -8,12 +8,28 @@ import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../app/hooks';
 import { addUser, UserState } from '../login/userSlice';
 
+/**
+ * A handling function for the log-in button.
+ *
+ * @param props - Props for the function.
+ */
 async function handleSignUp(props: {
+  /** Form submit event. */
   e: React.FormEvent<HTMLFormElement>;
+
+  /** Email typed in the form. */
   email: string;
+
+  /** Password typed in the form. */
   password: string;
+
+  /** Navigate function. */
   navigate: NavigateFunction;
+
+  /** An `auth` instance of the Firebase project. */
   auth: Auth;
+
+  /** A dispatch function from the `useAppDispatch` hook. */
   dispatch: ThunkDispatch<
     {
       user: UserState;
@@ -22,7 +38,7 @@ async function handleSignUp(props: {
     AnyAction
   > &
     Dispatch<AnyAction>;
-}) {
+}): Promise<void> {
   const { e, email, password, navigate, auth, dispatch } = props;
   e.preventDefault();
   try {
@@ -43,7 +59,15 @@ async function handleSignUp(props: {
   }
 }
 
-export default function SignUp(props: { firebaseApp: FirebaseApp }) {
+/**
+ * Renders a sign-in page.
+ *
+ * @param props - Prop for the component.
+ */
+export default function SignUp(props: {
+  /** A Firebase app instance. */
+  firebaseApp: FirebaseApp;
+}) {
   const { firebaseApp } = props;
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');

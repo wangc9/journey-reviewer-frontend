@@ -65,7 +65,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function StyledMenu() {
+/**
+ * Renders a `menu` button.
+ */
+export function StyledMenu(): JSX.Element {
   return (
     <IconButton
       size="large"
@@ -79,7 +82,10 @@ function StyledMenu() {
   );
 }
 
-function StyledHeadline() {
+/**
+ * Renders the app name "journey viewer".
+ */
+export function StyledHeadline(): JSX.Element {
   return (
     <Typography
       variant="h6"
@@ -92,7 +98,10 @@ function StyledHeadline() {
   );
 }
 
-function StyledSearchBar() {
+/**
+ * Renders a search bar with "Search..." as the placeholder.
+ */
+export function StyledSearchBar(): JSX.Element {
   return (
     <Search>
       <SearchIconWrapper>
@@ -106,7 +115,10 @@ function StyledSearchBar() {
   );
 }
 
-function StyledGitHubIcon() {
+/**
+ * Renders a button with GitHub icon. Navigate to the GitHub repo when clicked.
+ */
+export function StyledGitHubIcon(): JSX.Element {
   return (
     <IconButton
       size="large"
@@ -122,7 +134,13 @@ function StyledGitHubIcon() {
   );
 }
 
-function StyledMapIcon() {
+/**
+ * Renders a button with map icon. Navigate to
+ * `/user/stations/map/single` when clicked. A description
+ * "Map View" appears when the browser size is greater than
+ * middle.
+ */
+export function StyledMapIcon(): JSX.Element {
   const navigate = useNavigate();
 
   return (
@@ -148,7 +166,11 @@ function StyledMapIcon() {
   );
 }
 
-function StyledListIcon() {
+/**
+ * Renders a button with list icon. A description "List View"
+ * appear when the browser size is greater than middle.
+ */
+export function StyledListIcon(): JSX.Element {
   return (
     <div>
       <Button
@@ -171,7 +193,23 @@ function StyledListIcon() {
   );
 }
 
-function NotificationWithBadge(props: { badge: number }) {
+/**
+ * Prop for {@link NotificationWithBadge}
+ */
+export interface NotificationWithBadgeProp {
+  /** Number of new notifications */
+  badge: number;
+}
+
+/**
+ * Renders a button with a notification icon and a badge displaying
+ * the number of unread messages
+ *
+ * @param props - prop for the component. Implemented at {@link NotificationWithBadgeProp}.
+ */
+export function NotificationWithBadge(
+  props: NotificationWithBadgeProp,
+): JSX.Element {
   const { badge } = props;
   return (
     <IconButton
@@ -190,7 +228,21 @@ function NotificationWithBadge(props: { badge: number }) {
   );
 }
 
-function StyledAccountIcon(props: { email: string | null }) {
+/**
+ * Prop for {@link StyledAccountIcon}
+ */
+export interface StyledAccountIconProp {
+  /** Email of the user. Input `null` when not logged in. */
+  email: string | null;
+}
+
+/**
+ * Renders a button with an account icon. When not logged-in,
+ * clicking the button redirects to `/login` page for user login. When logged-in,
+ *
+ * @param props - Prop for the component. Implemented at {@link StyledAccountIconProp}.
+ */
+export function StyledAccountIcon(props: StyledAccountIconProp): JSX.Element {
   const [showCard, setShowCard] = useState<boolean>(false);
   const navigate = useNavigate();
   const { email } = props;
@@ -220,9 +272,20 @@ function StyledAccountIcon(props: { email: string | null }) {
   );
 }
 
-function MobileMoreIcon(props: {
+/**
+ * Prop for {@link MobileMoreIcon}.
+ */
+export interface MobileMoreIconProp {
+  /** Function when button is clicked. */
   handleMobileOpen: (event: React.MouseEvent<HTMLElement>) => void;
-}) {
+}
+
+/**
+ * Renders a button with "three-dot" icon.
+ *
+ * @param props - Prop for the component. Implemented at {@link MobileMoreIconProp}.
+ */
+export function MobileMoreIcon(props: MobileMoreIconProp): JSX.Element {
   const { handleMobileOpen } = props;
   return (
     <IconButton
@@ -239,7 +302,10 @@ function MobileMoreIcon(props: {
   );
 }
 
-export default function NaviBar() {
+/**
+ * Renders a navigation bar.
+ */
+export default function NaviBar(): JSX.Element {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [mobileAnchor, setMobileAnchor] = useState<null | HTMLElement>(null);
   const credential = useAppSelector(selectCredential);

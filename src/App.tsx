@@ -9,7 +9,10 @@ import SignUp from './features/signUp/SignUp';
 import AddStationMap from './features/map/AddStationMap';
 import UserStationMap from './features/map/UserStationMap';
 
-function App() {
+/**
+ * Renders the main page of the frontend. Contains the tool bar and welcome page.
+ */
+function App(): JSX.Element {
   return (
     <div style={{ textAlign: 'center' }}>
       <NaviBar />
