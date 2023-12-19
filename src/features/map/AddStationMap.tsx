@@ -9,6 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -16,12 +17,14 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useField } from '../../app/hooks';
 import { IStation } from '../listView/stationSlice';
 import stationServices from '../../services/stations';
 import { selectCredential } from '../login/userSlice';
+import StationFileUpload from '../FileUpload/StationFileUpload';
 
 /**
  * Type for position data.
@@ -116,6 +119,10 @@ export interface MapDialogProps {
  */
 export function MapDialog(props: MapDialogProps): JSX.Element {
   const { showPromote, setShowPromote, position } = props;
+  const latitude = useField('number');
+  latitude.value = position ? position.lat.toString() : '';
+  const longitude = useField('number');
+  longitude.value = position ? position.lng.toString() : '';
   const name = useField('text');
   const namn = useField('text');
   const nimi = useField('text');
@@ -176,9 +183,28 @@ export function MapDialog(props: MapDialogProps): JSX.Element {
       {notification && <Alert severity="error">{notification}</Alert>}
       <DialogTitle>Enter new station information</DialogTitle>
       <DialogContent>
-        <Typography variant="subtitle1" component="div">
-          latitude: {position?.lat} longitude: {position?.lng}
-        </Typography>
+        <Box sx={{ display: 'flex' }}>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="new-station-latitude"
+            label="latitude"
+            aria-label="latitude of the new station"
+            fullWidth
+            value={latitude.value}
+            onChange={latitude.onChange}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="new-station-longitude"
+            label="longitude"
+            aria-label="longitude of the new station"
+            fullWidth
+            value={longitude.value}
+            onChange={longitude.onChange}
+          />
+        </Box>
         <TextField
           autoFocus
           margin="dense"
@@ -304,28 +330,65 @@ export default function AddStationMap(): JSX.Element {
     null,
   );
   const [showPromote, setShowPromote] = useState<boolean>(false);
+  const theme = useTheme();
 
   return (
-    <div>
-      <MapContainer
-        center={[60.171003, 24.941497]}
-        zoom={13}
-        style={{ height: '500px', width: '500px' }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MapFunction
-          setCurrentPosition={setCurrentPosition}
-          setShowPromote={setShowPromote}
-        />
-      </MapContainer>
-      <MapDialog
-        setShowPromote={setShowPromote}
-        showPromote={showPromote}
-        position={currentPosition}
-      />
-    </div>
+    <Box sx={{ display: 'flex' }}>
+      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Typography variant="h4">Want to add a new station?</Typography>
+          <Typography variant="subtitle1">
+            Click on the map and add some details!
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            padding: theme.spacing(1, 0),
+            display: 'flex',
+            justifyContent: 'center',
+            alignContent: 'center',
+          }}
+        >
+          <MapContainer
+            center={[60.171003, 24.941497]}
+            zoom={20}
+            style={{ height: '600px', width: '600px', alignContent: 'center' }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.digitransit.fi/en/developers/apis/6-terms-of-use/">Digitransit</a> contributors'
+              url="https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}@2x.png?digitransit-subscription-key=e272a3da0ede40f0bfe2b95083b33298"
+            />
+            <MapFunction
+              setCurrentPosition={setCurrentPosition}
+              setShowPromote={setShowPromote}
+            />
+          </MapContainer>
+          <MapDialog
+            setShowPromote={setShowPromote}
+            showPromote={showPromote}
+            position={currentPosition}
+          />
+        </Box>
+        <Box sx={{ flexGrow: 1 }} />
+      </Box>
+      <Box sx={{ flexGrow: 1 }} />
+      <Divider orientation="vertical" flexItem />
+      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Typography variant="h4">
+          Have more than a handful of stations?
+        </Typography>
+        <Typography variant="subtitle1">
+          Try upload an csv file instead!
+        </Typography>
+        <Box sx={{ flexGrow: 1 }} />
+        <StationFileUpload />
+        <Box sx={{ flexGrow: 1 }} />
+      </Box>
+
+      <Box sx={{ flexGrow: 1 }} />
+    </Box>
   );
 }

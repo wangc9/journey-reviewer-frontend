@@ -28,5 +28,6 @@ module.exports = {
     'react/jsx-no-target-blank': 'off',
     'react/require-default-props': 'off',
     'tsdoc/syntax': 'warn',
+    'import/no-extraneous-dependencies': 'off',
   },
 };
