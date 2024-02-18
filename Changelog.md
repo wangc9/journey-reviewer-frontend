@@ -2,6 +2,12 @@
 Note: "*" indicates that the commit link is a placeholder. The corresponding link will be updated in the next commit.
 
 
+## v0.5.1
+
+### Features
+- [`6f086cc`](https://github.com/wangc9/journey-reviewer-frontend/commit/6f086cc7b2cbe82f102ddc49627f0335e40e3b15)* Change CI pipeline to enable actions on pull requests
+
+
 ## v0.5.0
 
 ### Features
