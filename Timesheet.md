@@ -11,4 +11,5 @@
 | 7.12.  | 6    | Add simple map views                                   |
 | 10.12. | 4    | Add documentation for codebase and project description |
 | 19.12. | 5    | Add file dropbox, change source of map                 |
-|  yht   | 49   |                                                        |
+| 20.02. | 3    | Fix dropbox                                            |
+|  yht   | 52   |                                                        |

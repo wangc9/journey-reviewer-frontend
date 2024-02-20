@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { FilePondFile } from 'filepond';
+import { UserCredential } from 'firebase/auth';
 
 const baseUrl = 'http://localhost:3001/api';
 
@@ -11,19 +12,32 @@ const baseUrl = 'http://localhost:3001/api';
  *
  * @returns `{status: HTML status, data: {added: [SId], disregarded: [SId]} if successful or error message if failed}`
  */
-const fileUpload = async (file: FilePondFile, url: string) => {
-  const formData = new FormData();
-  formData.append('file', file.file);
+const fileUpload = async (
+  file: FilePondFile,
+  url: string,
+  token: UserCredential | undefined,
+) => {
+  if (token) {
+    const userId = await token.user.getIdToken();
+    const formData = new FormData();
+    formData.append('file', file.file);
+    formData.append('token', userId);
 
-  try {
-    const response = await axios.post(`${baseUrl}/${url}`, formData);
+    try {
+      const response = await axios.post(`${baseUrl}/${url}`, formData);
 
-    return response;
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return { status: error.code, data: error.response?.data.error };
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return { status: error.code, data: error.response?.data.error };
+      }
+      return { status: 500, data: 'Incorrect service logic' };
     }
-    return { status: 500, data: 'Incorrect service logic' };
+  } else {
+    return {
+      status: 400,
+      data: "It seems that you haven't signed in yet. Sign in or sign up to add your own stations.",
+    };
   }
 };
 

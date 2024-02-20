@@ -2,10 +2,22 @@
 Note: "*" indicates that the commit link is a placeholder. The corresponding link will be updated in the next commit.
 
 
+## v0.5.3
+
+### Bug fixes
+- [`abd3fb0`](https://github.com/wangc9/journey-reviewer-frontend/commit/abd3fb05071f150b7c0105ef39afa29fd044026e)* Fix file dropbox
+
+
+## v0.5.2
+
+### Features
+- [`abd3fb0`](https://github.com/wangc9/journey-reviewer-frontend/commit/abd3fb05071f150b7c0105ef39afa29fd044026e) Change CI pipeline to enable actions on pull requests
+
+
 ## v0.5.1
 
 ### Features
-- [`6f086cc`](https://github.com/wangc9/journey-reviewer-frontend/commit/6f086cc7b2cbe82f102ddc49627f0335e40e3b15)* Change CI pipeline to enable actions on pull requests
+- [`ae50615`](https://github.com/wangc9/journey-reviewer-frontend/commit/ae50615513a46c06c70356f99d070e498809ec73) Add file dropbox using `filepond` and change the source of map to `Digitransit`
 
 
 ## v0.5.0

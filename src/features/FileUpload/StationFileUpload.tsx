@@ -5,6 +5,8 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import { Button, Alert, Box } from '@mui/material';
 import FileServices from '../../services/files';
+import { useAppSelector } from '../../app/hooks';
+import { selectCredential } from '../login/userSlice';
 
 registerPlugin(FilePondPluginFileValidateType);
 
@@ -26,21 +28,14 @@ export interface NotificationType {
   message: string;
 }
 
-// export interface StationFileUploadProps {
-//   /** A state to determine whether to show the file upload dialog. */
-//   showBox: boolean;
-
-//   /** The `set` function for `showBox`. */
-//   setShowBox: Dispatch<SetStateAction<boolean>>;
-// }
-
 /**
  * Renders a drag-and-drop file upload box.
  */
 export default function StationFileUpload(): JSX.Element {
-// props: StationFileUploadProps,
+  // props: StationFileUploadProps,
   const [file, setFile] = useState<FilePondFile | null>(null);
   const [notify, setNotify] = useState<NotificationType | null>(null);
+  const token = useAppSelector(selectCredential);
 
   const handleUpdateFile = (fileItem: Array<FilePondFile>) => {
     if (fileItem.length > 0) {
@@ -52,7 +47,11 @@ export default function StationFileUpload(): JSX.Element {
 
   const handleUpload = async () => {
     if (file) {
-      const response = await FileServices.fileUpload(file, 'stations/file');
+      const response = await FileServices.fileUpload(
+        file,
+        'stations/file',
+        token,
+      );
       if (response.status !== 201) {
         setNotify({
           severity: Severity.Error,
@@ -61,7 +60,7 @@ export default function StationFileUpload(): JSX.Element {
       } else if (response.data.disregarded.length > 0) {
         setNotify({
           severity: Severity.Warning,
-          message: `The following stations has been disregarded: ${response.data.disregarded}`,
+          message: `The following stations has been disregarded: ${response.data.disregarded}. ${response.data.message}.`,
         });
       } else {
         setNotify({
@@ -75,7 +74,11 @@ export default function StationFileUpload(): JSX.Element {
   return (
     <Box>
       {notify && (
-        <Alert severity={notify.severity} onClose={() => setNotify(null)}>
+        <Alert
+          sx={{ width: '40vw', whiteSpace: 'pre-line' }}
+          severity={notify.severity}
+          onClose={() => setNotify(null)}
+        >
           {notify.message}
         </Alert>
       )}
