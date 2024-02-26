@@ -1,12 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { Auth, getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { TextField, Button, useTheme, Box } from '@mui/material';
+import { TextField, Button, useTheme, Box, Alert } from '@mui/material';
 import { FirebaseApp, FirebaseError } from 'firebase/app';
 import { ThunkDispatch, AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { useAppDispatch } from '../../app/hooks';
 import { addUser, UserState } from '../login/userSlice';
+import userService from '../../services/users';
 
 /**
  * A handling function for the log-in button.
@@ -38,8 +39,22 @@ async function handleSignUp(props: {
     AnyAction
   > &
     Dispatch<AnyAction>;
+
+  setAlert: React.Dispatch<React.SetStateAction<string | null>>;
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }): Promise<void> {
-  const { e, email, password, navigate, auth, dispatch } = props;
+  const {
+    e,
+    email,
+    password,
+    navigate,
+    auth,
+    dispatch,
+    setAlert,
+    show,
+    setShow,
+  } = props;
   e.preventDefault();
   try {
     const credential = await createUserWithEmailAndPassword(
@@ -48,8 +63,23 @@ async function handleSignUp(props: {
       password,
     );
     if (credential) {
-      dispatch(addUser(credential));
-      navigate('/');
+      try {
+        const token = await credential.user.getIdToken();
+        const newUser = await userService.createUser({
+          username: email,
+          token,
+        });
+        if (newUser.data.username === email) {
+          dispatch(addUser(credential));
+          navigate('/');
+        } else {
+          setAlert('Can not create user');
+          setShow(!show);
+        }
+      } catch (error) {
+        setAlert(`Error: ${error}`);
+        setShow(!show);
+      }
     }
   } catch (error) {
     if (error instanceof FirebaseError) {
@@ -71,10 +101,18 @@ export default function SignUp(props: {
   const { firebaseApp } = props;
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [alert, setAlert] = useState<string | null>(null);
+  const [show, setShow] = useState<boolean>(false);
   const theme = useTheme();
   const auth = getAuth(firebaseApp);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAlert(null);
+    }, 3000);
+  }, [show]);
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
@@ -96,9 +134,20 @@ export default function SignUp(props: {
           }}
         >
           <h1 style={{ alignSelf: 'flex-start' }}>Sign up</h1>
+          {alert && <Alert severity="error">{alert}</Alert>}
           <form
             onSubmit={(e) => {
-              handleSignUp({ e, email, password, navigate, auth, dispatch });
+              handleSignUp({
+                e,
+                email,
+                password,
+                navigate,
+                auth,
+                dispatch,
+                show,
+                setAlert,
+                setShow,
+              });
             }}
             style={{
               display: 'flex',

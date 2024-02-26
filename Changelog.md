@@ -2,10 +2,18 @@
 Note: "*" indicates that the commit link is a placeholder. The corresponding link will be updated in the next commit.
 
 
+## v0.5.4
+
+### Bug fixes
+- [`f2eb5b1`](https://github.com/wangc9/journey-reviewer-frontend/commit/f2eb5b15721e1245f1a1fd9c9324ece5e6cde2b1)* Fix user sign-up
+  - New user is now created in database after sign-up.
+  - An alert is displayed on top of the sign-up form when encountering errors.
+
+
 ## v0.5.3
 
 ### Bug fixes
-- [`abd3fb0`](https://github.com/wangc9/journey-reviewer-frontend/commit/abd3fb05071f150b7c0105ef39afa29fd044026e)* Fix file dropbox
+- [`f2eb5b1`](https://github.com/wangc9/journey-reviewer-frontend/commit/f2eb5b15721e1245f1a1fd9c9324ece5e6cde2b1) Fix file dropbox
 
 
 ## v0.5.2
