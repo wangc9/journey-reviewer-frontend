@@ -2,10 +2,16 @@
 Note: "*" indicates that the commit link is a placeholder. The corresponding link will be updated in the next commit.
 
 
+## v0.5.5
+
+### Features
+- [`2bf2d0c`](https://github.com/wangc9/journey-reviewer-frontend/commit/2bf2d0cfb339b4020a05de6dbf8c7c8731ea1723)* Display all stations on map
+
+
 ## v0.5.4
 
 ### Bug fixes
-- [`f2eb5b1`](https://github.com/wangc9/journey-reviewer-frontend/commit/f2eb5b15721e1245f1a1fd9c9324ece5e6cde2b1)* Fix user sign-up
+- [`2bf2d0c`](https://github.com/wangc9/journey-reviewer-frontend/commit/2bf2d0cfb339b4020a05de6dbf8c7c8731ea1723) Fix user sign-up
   - New user is now created in database after sign-up.
   - An alert is displayed on top of the sign-up form when encountering errors.
 

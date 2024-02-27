@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { FilePondFile } from 'filepond';
 import { UserCredential } from 'firebase/auth';
 
@@ -16,7 +16,17 @@ const fileUpload = async (
   file: FilePondFile,
   url: string,
   token: UserCredential | undefined,
-) => {
+): Promise<
+  | AxiosResponse<any, any>
+  | {
+      status: string | undefined;
+      data: any;
+    }
+  | {
+      status: number;
+      data: string;
+    }
+> => {
   if (token) {
     const userId = await token.user.getIdToken();
     const formData = new FormData();

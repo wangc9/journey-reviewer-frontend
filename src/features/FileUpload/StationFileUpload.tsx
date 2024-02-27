@@ -5,8 +5,9 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import { Button, Alert, Box } from '@mui/material';
 import FileServices from '../../services/files';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { selectCredential } from '../login/userSlice';
+import { addStations } from './stationSlice';
 
 registerPlugin(FilePondPluginFileValidateType);
 
@@ -36,6 +37,7 @@ export default function StationFileUpload(): JSX.Element {
   const [file, setFile] = useState<FilePondFile | null>(null);
   const [notify, setNotify] = useState<NotificationType | null>(null);
   const token = useAppSelector(selectCredential);
+  const dispatch = useAppDispatch();
 
   const handleUpdateFile = (fileItem: Array<FilePondFile>) => {
     if (fileItem.length > 0) {
@@ -52,6 +54,9 @@ export default function StationFileUpload(): JSX.Element {
         'stations/file',
         token,
       );
+      if (response.data.added) {
+        dispatch(addStations(response.data.added));
+      }
       if (response.status !== 201) {
         setNotify({
           severity: Severity.Error,

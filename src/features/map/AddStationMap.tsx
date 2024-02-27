@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useField } from '../../app/hooks';
-import { IStation } from '../listView/stationSlice';
+import { IStation } from '../FileUpload/stationSlice';
 import stationServices from '../../services/stations';
 import { selectCredential } from '../login/userSlice';
 import StationFileUpload from '../FileUpload/StationFileUpload';

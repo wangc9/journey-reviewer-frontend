@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import axios, { AxiosError } from 'axios';
-import type { IStation } from '../features/listView/stationSlice';
+import type { IStation } from '../features/FileUpload/stationSlice';
 
 const baseUrl = 'http://localhost:3001/api';
 

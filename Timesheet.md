@@ -12,4 +12,5 @@
 | 10.12. | 4    | Add documentation for codebase and project description |
 | 19.12. | 5    | Add file dropbox, change source of map                 |
 | 20.02. | 3    | Fix dropbox                                            |
-|  yht   | 52   |                                                        |
+| 26.02. | 4    | Add alert message and user handling                    |
+|  yht   | 56   |                                                        |
