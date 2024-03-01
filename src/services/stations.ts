@@ -31,6 +31,39 @@ const getByUser = async (user: string) => {
 };
 
 /**
+ * Get 10 stations according to the page number.
+ *
+ * @param page - page number
+ *
+ * @returns An array of basic station information `Array<{name, SId, x, y}>`
+ */
+const getByPage = async (page: number) => {
+  const response = await axios.get(`${baseUrl}/stations/page/${page}`);
+
+  const { stations } = response.data;
+
+  const result = stations.map((station: IStation) => ({
+    name: station.Nimi,
+    SId: station.SId,
+    x: station.x,
+    y: station.y,
+  }));
+
+  return result;
+};
+
+/**
+ * Get the number of pages.
+ */
+const getPageCount = async () => {
+  const response = await axios.get(`${baseUrl}/stations/count`);
+
+  const { count } = response.data;
+
+  return count;
+};
+
+/**
  * Create a number according to the current time.
  *
  * @returns The time when called as number.
@@ -69,4 +102,10 @@ const createSingleStation = async (
   }
 };
 
-export default { getAll, getByUser, createSingleStation };
+export default {
+  getAll,
+  getByUser,
+  getByPage,
+  getPageCount,
+  createSingleStation,
+};

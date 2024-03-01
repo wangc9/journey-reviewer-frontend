@@ -1,18 +1,21 @@
 import React from 'react';
-// import logo from './logo.svg';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 import Login from './features/login/Login';
-// import { Counter } from './features/counter/Counter';
 import firebaseClient from './utils/firebase-client-config';
 import NaviBar from './features/navigation/NaviBar';
 import SignUp from './features/signUp/SignUp';
 import AddStationMap from './features/map/AddStationMap';
 import UserStationMap from './features/map/UserStationMap';
+import StationList from './features/listView/StationList';
 
 /**
  * Renders the main page of the frontend. Contains the tool bar and welcome page.
  */
 function App(): JSX.Element {
+  const navigate = useNavigate();
+
   return (
     <div style={{ textAlign: 'center' }}>
       <NaviBar />
@@ -24,56 +27,33 @@ function App(): JSX.Element {
           path="/signup"
           element={<SignUp firebaseApp={firebaseClient} />}
         />
-        <Route path="/user/stations/map" element={<UserStationMap />} />
+        <Route
+          path="/user/stations/map"
+          element={
+            <div style={{ display: 'flex' }}>
+              <div style={{ width: '30%' }}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  endIcon={<AddLocationAltIcon />}
+                  onClick={() => {
+                    navigate('/user/stations/map/single');
+                  }}
+                  sx={{
+                    width: '100%',
+                  }}
+                >
+                  new station
+                </Button>
+                <StationList />
+              </div>
+              <UserStationMap />
+            </div>
+          }
+        />
         <Route path="/user/stations/map/single" element={<AddStationMap />} />
+        <Route path="/stations/list" element={<StationList />} />
       </Routes>
-
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header> */}
     </div>
   );
 }

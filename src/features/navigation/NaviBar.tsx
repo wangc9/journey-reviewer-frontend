@@ -149,7 +149,7 @@ export function StyledMapIcon(): JSX.Element {
         sx={{ display: { xs: 'none', md: 'flex' } }}
         startIcon={<MapIcon />}
         color="inherit"
-        onClick={() => navigate('/user/stations/map/single')}
+        onClick={() => navigate('/user/stations/map')}
       >
         Map View
       </Button>
@@ -159,6 +159,7 @@ export function StyledMapIcon(): JSX.Element {
         color="inherit"
         aria-label="open drawer"
         sx={{ mr: 2, display: { xs: 'flex', md: 'none' } }}
+        onClick={() => navigate('/user/stations/map')}
       >
         <MapIcon />
       </IconButton>
@@ -171,12 +172,15 @@ export function StyledMapIcon(): JSX.Element {
  * appear when the browser size is greater than middle.
  */
 export function StyledListIcon(): JSX.Element {
+  const navigate = useNavigate();
+
   return (
     <div>
       <Button
         sx={{ display: { xs: 'none', md: 'flex' } }}
         startIcon={<ListIcon />}
         color="inherit"
+        onClick={() => navigate('/stations/list')}
       >
         List View
       </Button>
@@ -186,6 +190,7 @@ export function StyledListIcon(): JSX.Element {
         color="inherit"
         aria-label="open drawer"
         sx={{ mr: 2, display: { xs: 'flex', md: 'none' } }}
+        onClick={() => navigate('/stations/list')}
       >
         <ListIcon />
       </IconButton>
