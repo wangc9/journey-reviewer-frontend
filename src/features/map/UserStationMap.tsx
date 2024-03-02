@@ -1,43 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import stationService from '../../services/stations';
-import {
-  IStation,
-  StationPayload,
-  addStations,
-  selectStations,
-} from '../FileUpload/stationSlice';
+import { useAppSelector } from '../../app/hooks';
+import { selectStations } from '../FileUpload/stationSlice';
 
 /**
  * Renders a map with all the user-added stations
  */
 export default function UserStationMap(): JSX.Element {
-  const initialised = useRef(false);
-  const dispatch = useAppDispatch();
   const stations = useAppSelector(selectStations);
-
-  useEffect(() => {
-    async function fillDefaultStations() {
-      const defaultStations = await stationService.getAll();
-      const simplifiedStations: Array<StationPayload> = [];
-      defaultStations.stations.forEach((element: IStation) => {
-        simplifiedStations.push({
-          name: element.Name,
-          sid: element.SId,
-          x: element.x,
-          y: element.y,
-        });
-      });
-      if (!initialised.current) {
-        initialised.current = true;
-        dispatch(addStations(simplifiedStations));
-      }
-    }
-
-    fillDefaultStations();
-  }, []);
 
   return (
     <MapContainer

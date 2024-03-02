@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { List, Pagination } from '@mui/material';
-import StationService from '../../services/stations';
 import StationListItem from './StationListItem';
-
-export interface SimpleStation {
-  name: string;
-  SId: number;
-  x: number;
-  y: number;
-}
+import { selectStations } from '../FileUpload/stationSlice';
+import { useAppSelector } from '../../app/hooks';
 
 /**
  * A list of buttons containing the name of the station along with a page selection group.
@@ -16,25 +10,12 @@ export interface SimpleStation {
 export default function StationList(): React.JSX.Element {
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(1);
-  const [stations, setStations] = useState<Array<SimpleStation>>([]);
+
+  const stations = useAppSelector(selectStations);
 
   useEffect(() => {
-    async function getPageCount() {
-      const count = await StationService.getPageCount();
-      setPageCount(count);
-    }
-
-    getPageCount();
-  }, []);
-
-  useEffect(() => {
-    async function updateStations() {
-      const newStations = await StationService.getByPage(page - 1);
-      setStations(newStations);
-    }
-
-    updateStations();
-  }, [page]);
+    setPageCount(Math.ceil(stations.length / 10));
+  }, [stations]);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -53,8 +34,8 @@ export default function StationList(): React.JSX.Element {
       }}
     >
       <List>
-        {stations.map((station) => (
-          <StationListItem name={station.name} key={station.SId} />
+        {stations.slice((page - 1) * 10, page * 10).map((station) => (
+          <StationListItem name={station.name} key={station.sid} />
         ))}
       </List>
       <Pagination

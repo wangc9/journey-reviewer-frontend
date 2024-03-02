@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
@@ -9,12 +9,42 @@ import SignUp from './features/signUp/SignUp';
 import AddStationMap from './features/map/AddStationMap';
 import UserStationMap from './features/map/UserStationMap';
 import StationList from './features/listView/StationList';
+import stationService from './services/stations';
+import {
+  StationPayload,
+  IStation,
+  addStations,
+} from './features/FileUpload/stationSlice';
+import { useAppDispatch } from './app/hooks';
 
 /**
  * Renders the main page of the frontend. Contains the tool bar and welcome page.
  */
 function App(): JSX.Element {
   const navigate = useNavigate();
+  const initialised = useRef(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    async function fillDefaultStations() {
+      const defaultStations = await stationService.getAll();
+      const simplifiedStations: Array<StationPayload> = [];
+      defaultStations.stations.forEach((element: IStation) => {
+        simplifiedStations.push({
+          name: element.Name,
+          sid: element.SId,
+          x: element.x,
+          y: element.y,
+        });
+      });
+      if (!initialised.current) {
+        initialised.current = true;
+        dispatch(addStations(simplifiedStations));
+      }
+    }
+
+    fillDefaultStations();
+  }, []);
 
   return (
     <div style={{ textAlign: 'center' }}>

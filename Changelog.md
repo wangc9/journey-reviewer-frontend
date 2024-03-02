@@ -2,10 +2,16 @@
 Note: "*" indicates that the commit link is a placeholder. The corresponding link will be updated in the next commit.
 
 
+## v0.5.7
+
+### Features
+- [`50eea72`](https://github.com/wangc9/journey-reviewer-frontend/commit/50eea723678d3760891882cf621e18fab121875c)* Add file dropbox for journey csv
+
+
 ## v0.5.6
 
 ### Features
-- [`960eeba`](https://github.com/wangc9/journey-reviewer-frontend/commit/960eeba85035d37f82972c1560501b3ea5e2624b)* Display all stations in list
+- [`50eea72`](https://github.com/wangc9/journey-reviewer-frontend/commit/50eea723678d3760891882cf621e18fab121875c) Display all stations in list
   - Clicking the map view button will now direct to the map view of all stations accompanied with a paginated list. The old map view (station adding page) can be accessed via the `new station` button on the current page.
   - The list view button now directs to a simplified list of stations shared with the map view. Each page contains 10 stations. More details will be added to the list.
   - New services `getByPage` and `getPageCount` are added in connection with the pagination of station.

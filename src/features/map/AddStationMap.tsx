@@ -20,11 +20,12 @@ import {
   useTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector, useField } from '../../app/hooks';
-import { IStation } from '../FileUpload/stationSlice';
+import { useAppDispatch, useAppSelector, useField } from '../../app/hooks';
+import { IStation, addStation } from '../FileUpload/stationSlice';
 import stationServices from '../../services/stations';
 import { selectCredential } from '../login/userSlice';
 import StationFileUpload from '../FileUpload/StationFileUpload';
+import JourneyFileUpload from '../FileUpload/JourneyFileUpload';
 
 /**
  * Type for position data.
@@ -134,6 +135,7 @@ export function MapDialog(props: MapDialogProps): JSX.Element {
   const token = useAppSelector(selectCredential);
   const navigate = useNavigate();
   const [notification, setNotification] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
   const handleCreate = async () => {
     if (!token) {
@@ -173,6 +175,14 @@ export function MapDialog(props: MapDialogProps): JSX.Element {
       setNotification(response.data);
       return null;
     }
+    dispatch(
+      addStation({
+        name: response.data.station.Nimi,
+        sid: response.data.station.SId,
+        x: response.data.station.x,
+        y: response.data.station.y,
+      }),
+    );
     navigate('/user/stations/map');
 
     return <p>Redricting...</p>;
@@ -385,6 +395,7 @@ export default function AddStationMap(): JSX.Element {
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <StationFileUpload />
+        <JourneyFileUpload />
         <Box sx={{ flexGrow: 1 }} />
       </Box>
 
