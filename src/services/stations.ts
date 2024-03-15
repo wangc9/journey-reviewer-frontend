@@ -15,6 +15,73 @@ const getAll = async () => {
   return response.data;
 };
 
+export type StationCountTuple<K, V> = [K, V];
+
+const getById = async (id: string) => {
+  const response = await axios.get(`${baseUrl}/stations/sid/${id}`);
+  const name = response.data.station.Nimi;
+  const address = response.data.station.Osoite;
+  const startCount = response.data.station.journeys.depart.length;
+  const endCount = response.data.station.journeys.arrive.length;
+  const startSum = response.data.station.journeys.depart.reduce(
+    (prev: number, curr: { distance: number; id: string }) =>
+      prev + curr.distance,
+    0,
+  );
+  const endSum = response.data.station.journeys.arrive.reduce(
+    (prev: number, curr: { distance: number; id: string }) =>
+      prev + curr.distance,
+    0,
+  );
+  const avgStart = startCount === 0 ? 0 : startSum / startCount;
+  const avgEnd = endCount === 0 ? 0 : endSum / endCount;
+  const sortedDepartList = (
+    Object.entries(response.data.station.departure) as Array<
+      StationCountTuple<string, number>
+    >
+  ).sort((a, b) => b[1] - a[1]);
+  const popularDepartList = sortedDepartList.slice(0, 5);
+  const popularDepart: Array<StationCountTuple<string, number>> = [];
+  await Promise.all(
+    await popularDepartList.map(async (tuple) => {
+      const newTuple: StationCountTuple<string, number> = [
+        (await axios.get(`${baseUrl}/stations/id/${tuple[0]}`)).data.name,
+        tuple[1],
+      ];
+      popularDepart.push(newTuple);
+    }),
+  );
+  const sortedDestList = (
+    Object.entries(response.data.station.destination) as Array<
+      StationCountTuple<string, number>
+    >
+  ).sort((a, b) => b[1] - a[1]);
+  const popularDestList = sortedDestList.slice(0, 5);
+  const popularDest: Array<StationCountTuple<string, number>> = [];
+  await Promise.all(
+    await popularDestList.map(async (tuple) => {
+      const newTuple: StationCountTuple<string, number> = [
+        (await axios.get(`${baseUrl}/stations/id/${tuple[0]}`)).data.name,
+        tuple[1],
+      ];
+      popularDest.push(newTuple);
+    }),
+  );
+  // console.log(Object.entries(response.data.station.departure));
+  // console.log(popularDepart);
+
+  return {
+    name,
+    address,
+    startCount,
+    endCount,
+    avgStart,
+    avgEnd,
+    departList: popularDepart,
+    destList: popularDest,
+  };
+};
+
 /**
  * Get all stations added by a user.
  *
@@ -105,6 +172,7 @@ const createSingleStation = async (
 export default {
   getAll,
   getByUser,
+  getById,
   getByPage,
   getPageCount,
   createSingleStation,

@@ -47,12 +47,19 @@ export interface StationPayload {
   y: number;
 }
 
+export interface LocationPayload {
+  x: number | null;
+  y: number | null;
+}
+
 export interface StationState {
   stations: Array<StationPayload>;
+  location: LocationPayload;
 }
 
 const initialState: StationState = {
   stations: [],
+  location: { x: null, y: null },
 };
 
 export const stationSlice = createSlice({
@@ -65,11 +72,15 @@ export const stationSlice = createSlice({
     addStations: (state, action: PayloadAction<Array<StationPayload>>) => {
       state.stations = state.stations.concat(action.payload);
     },
+    pointStation: (state, action: PayloadAction<LocationPayload>) => {
+      state.location = action.payload;
+    },
   },
 });
 
-export const { addStation, addStations } = stationSlice.actions;
+export const { addStation, addStations, pointStation } = stationSlice.actions;
 
 export const selectStations = (state: RootState) => state.station.stations;
+export const selectedStation = (state: RootState) => state.station.location;
 
 export default stationSlice.reducer;

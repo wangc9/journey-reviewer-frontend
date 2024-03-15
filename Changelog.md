@@ -2,10 +2,18 @@
 Note: "*" indicates that the commit link is a placeholder. The corresponding link will be updated in the next commit.
 
 
+## v0.5.8
+
+### Features
+- [`da2585e`](https://github.com/wangc9/journey-reviewer-frontend/commit/da2585e80193aca8000e27d453568d8efd2d2f5c)* Add information for single station
+  - Clicking the station marker now shows a pop-up with information of the clicked station.
+  - Clicking the station list now re-centres the map to the clicked station. A red mark is shown on top of the original mark for 1 second before disappearing.
+
+
 ## v0.5.7
 
 ### Features
-- [`50eea72`](https://github.com/wangc9/journey-reviewer-frontend/commit/50eea723678d3760891882cf621e18fab121875c)* Add file dropbox for journey csv
+- [`da2585e`](https://github.com/wangc9/journey-reviewer-frontend/commit/da2585e80193aca8000e27d453568d8efd2d2f5c) Add file dropbox for journey csv
 
 
 ## v0.5.6

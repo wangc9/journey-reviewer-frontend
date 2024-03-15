@@ -16,4 +16,5 @@
 | 27.02. | 4    | Display stations                                        |
 | 01.03. | 4    | Add list view                                           |
 | 02.03. | 2    | Add file dropbox for journey and change station preload |
-|  yht   | 66   |                                                         |
+| 15.03. | 10   | Add single-station information                          |
+|  yht   | 76   |                                                         |
